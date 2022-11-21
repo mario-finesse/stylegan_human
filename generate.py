@@ -40,7 +40,7 @@ python generate.py --outdir=outputs/generate/stylegan_human_v2_1024 --trunc=0.8 
 @click.command()
 @click.pass_context
 @click.option('--network', 'network_pkl', help='Network pickle filename', required=True)
-@click.option('--seeds', type=legacy.num_range, help='List of random seeds')
+@click.option('--seeds',  type=legacy.num_range, help='List of random seeds', default='0')
 @click.option('--trunc', 'truncation_psi', type=float, help='Truncation psi', default=1, show_default=True)
 @click.option('--noise-mode', help='Noise mode', type=click.Choice(['const', 'random', 'none']), default='const', show_default=True)
 @click.option('--outdir', help='Where to save the output images', default= 'outputs/generate/' , type=str, required=True, metavar='DIR')

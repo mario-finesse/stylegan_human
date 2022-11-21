@@ -36,7 +36,6 @@ class SingleIDCoach(BaseCoach):
 
             if hyperparameters.use_last_w_pivots:
                 w_pivot = self.load_inversions(w_path_dir, image_name)
-# Copyright (c) SenseTime Research. All rights reserved.
 
             elif not hyperparameters.use_last_w_pivots or w_pivot is None:
                 w_pivot = self.calc_inversions(image, image_name)

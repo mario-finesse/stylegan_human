@@ -110,7 +110,7 @@ def main(
                     )
                     real_image = transform(real_image).unsqueeze(0).cuda()                
 
-                test_input = torch.load(real_w_path)
+                test_input = torch.load(real_w_path).cuda()
                 output, _ = generator(test_input, False, truncation=1,input_is_latent=True, real=True)
 
             else: # generate image from random seeds

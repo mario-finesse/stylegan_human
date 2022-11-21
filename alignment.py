@@ -1,4 +1,6 @@
 # Copyright (c) SenseTime Research. All rights reserved.
+import pip
+
 
 
 import os
@@ -212,8 +214,8 @@ if __name__ == '__main__':
     description = 'StyleGAN-Human data process'
     parser = argparse.ArgumentParser(formatter_class=arg_formatter,
                                      description=description)
-    parser.add_argument('--image-folder', type=str, dest='image_folder')
-    parser.add_argument('--output-folder', dest='output_folder', default='results', type=str)
+    parser.add_argument('--image-folder', type=str, dest='image_folder', default='img/lingjie/')
+    parser.add_argument('--output-folder', dest='output_folder', default='aligned_image/', type=str)
     # parser.add_argument('--cfg', dest='cfg for segmentation', default='PP_HumanSeg/export_model/ppseg_lite_portrait_398x224_with_softmax/deploy.yaml', type=str)
 
     print('parsing arguments')
