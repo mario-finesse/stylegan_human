@@ -4,14 +4,13 @@ import os
 import sys
 import torch
 import numpy as np
-sys.path.append(".")
 from torch_utils.models import Generator
 import click
 import cv2
 from typing import List, Optional
 import subprocess
 import legacy
-from edit.edit_helper import conv_warper, decoder, encoder_ifg, encoder_ss, encoder_sefa 
+from edit.edit_helper import conv_warper, decoder, encoder_ifg, encoder_ss, encoder_sefa
 
 
 """
@@ -67,6 +66,7 @@ def main(
 ):
     ## convert pkl to pth
     # if not os.path.exists(ckpt_path.replace('.pkl','.pth')):
+    os.chdir('stylegan_human')
     legacy.convert(ckpt_path, ckpt_path.replace('.pkl','.pth'), G_only=real)
     ckpt_path = ckpt_path.replace('.pkl','.pth') 
     print("start...", flush=True)
