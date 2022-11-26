@@ -39,13 +39,13 @@ def init_multiprocessing(rank, sync_device):
 
     This function must be called after
     `torch.distributed.init_process_group()` and before `Collector.update()`.
-    The call is not necessary if multi-process collection is not needed.
+    The call is not necessary if multi-process scraper is not needed.
 
     Args:
         rank:           Rank of the current process.
         sync_device:    PyTorch device to use for inter-process
                         communication, or None to disable multi-process
-                        collection. Typically `torch.device('cuda', rank)`.
+                        scraper. Typically `torch.device('cuda', rank)`.
     """
     global _rank, _sync_device
     assert not _sync_called
@@ -227,7 +227,7 @@ class Collector:
 
     def __getitem__(self, name):
         r"""Convenience getter.
-        `collector[name]` is a synonym for `collector.mean(name)`.
+        `scraper[name]` is a synonym for `scraper.mean(name)`.
         """
         return self.mean(name)
 

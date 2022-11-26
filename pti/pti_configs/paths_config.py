@@ -12,7 +12,7 @@ experiments_output_dir = '/content/drive/MyDrive/ebg_r/pti'
 
 ## Input info
 ### Input dir, where the images reside
-input_data_path = '/content/drive/MyDrive/aligned_image'
+input_data_path = './stylegan_human/aligned_image'
 ### Inversion identifier, used to keeping track of the inversion results. Both the latent code and the generator
 input_data_id = 'test'
 

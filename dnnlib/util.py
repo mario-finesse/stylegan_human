@@ -401,7 +401,7 @@ def open_url(url: str, cache_dir: str = None, num_attempts: int = 10, verbose: b
     # If you touch this code path, you should test it on both Linux and
     # Windows.
     #
-    # Some internet resources suggest using urllib.request.url2pathname() but
+    # Some internet resources suggest using urllib.operator.url2pathname() but
     # but that converts forward slashes to backslashes and this causes
     # its own set of problems.
     if url.startswith('file://'):
