@@ -93,9 +93,12 @@ def crop_img_with_padding(img, keypoints, rect):
 
         cropped_img = img[int(ymin):int(ymax), int(xmin):int(xmax)]
         im_pad = cv2.copyMakeBorder(cropped_img, int(pad_up), int(pad_down), 0,
-                                    0, cv2.BORDER_REPLICATE) 
-    result = cv2.resize(im_pad,(512,1024),interpolation = cv2.INTER_AREA)
-    return result
+                                    0, cv2.BORDER_REPLICATE)
+    if im_pad is not None:
+        result = cv2.resize(im_pad,(512,1024),interpolation = cv2.INTER_AREA)
+        return result
+    else:
+        return im_pad
 
 
 
@@ -126,7 +129,8 @@ def run(args):
     human_seg_args = argparse.Namespace(**args.human_seg_args)
     human_seg = PP_HumenSeg_Predictor(human_seg_args)
 
-    total_segmentations = 0
+    #TODO: change back to zero
+    total_segmentations = 131
     from tqdm import tqdm
     for fname, full_image in tqdm(dataloader):
         # try:
@@ -147,6 +151,8 @@ def run(args):
         bodies = get_bodies(full_image_seg, body_estimation, num_required_points=args.num_required_keypoints,
                             include_buffer=args.include_buffer)
 
+        if len(bodies) == 0:
+            print("No full body poses in ", fname)
         for image in bodies:
             ## create segmentation
             # mybg = cv2.imread('mybg.png')
@@ -205,13 +211,13 @@ def run(args):
 
             comb = crop_img_with_padding(comb, keypoints, rect)
 
-            # TODO: fix formatting for image name, could be more than 1000 images
-            print('CWD: ', os.getcwd())
-            cv2.imwrite(f'{args.output_folder}/{total_segmentations:03d}.png', comb)
-            print(f' -- Finished processing \'{fname}\'. --')
-            total_segmentations += 1
-            # except:
-            #     print(f'Processing \'{fname}\'. Not satisfied the alignment strategy.')
+            if comb is not None:
+                # TODO: fix formatting for image name, could be more than 1000 images
+                cv2.imwrite(f'{args.output_folder}/{total_segmentations:03d}.png', comb)
+                print(f' -- Finished processing \'{fname}\'. --')
+                total_segmentations += 1
+                # except:
+                #     print(f'Processing \'{fname}\'. Not satisfied the alignment strategy.')
         
         
 if __name__ == '__main__':
