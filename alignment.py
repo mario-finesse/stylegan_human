@@ -147,8 +147,8 @@ def run(args):
             full_image = cv2.resize(full_image, dim, interpolation = cv2.INTER_AREA)
         full_image = cv2.cvtColor(full_image, cv2.COLOR_RGB2BGR)
 
-        full_image_seg, _, _, _ = human_seg.run(full_image, None)  #mybg)
-        bodies = get_bodies(full_image_seg, body_estimation, num_required_points=args.num_required_keypoints,
+        # full_image_seg, _, _, _ = human_seg.run(full_image, None)  #mybg)
+        bodies = get_bodies(full_image, body_estimation, num_required_points=args.num_required_keypoints,
                             include_buffer=args.include_buffer)
 
         if len(bodies) == 0:
@@ -201,9 +201,9 @@ def run(args):
             # ## detect keypoints
             keypoints, subset = body_estimation(comb)
             # # print(keypoints, subset, len(subset))
-            # if len(subset) != 1 or (len(subset)==1 and subset[0][-1]<15):
-            #     print(f'Processing \'{fname}\'. Please import image contains one person only. Also can check segmentation mask. ')
-            #     continue
+            if len(subset) != 1 or (len(subset)==1 and subset[0][-1]<args.num_required_keypoints):
+                print(f'Processing \'{fname}\'. Please import image contains one person only. Also can check segmentation mask. ')
+                continue
 
             # canvas = copy.deepcopy(comb)
             # canvas = util.draw_bodypose(canvas, keypoints, subset, show_number=True)
