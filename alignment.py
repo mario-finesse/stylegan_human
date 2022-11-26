@@ -129,8 +129,6 @@ def run(args):
     human_seg_args = argparse.Namespace(**args.human_seg_args)
     human_seg = PP_HumenSeg_Predictor(human_seg_args)
 
-    #TODO: change back to zero
-    total_segmentations = 131
     from tqdm import tqdm
     for fname, full_image in tqdm(dataloader):
         # try:
@@ -153,6 +151,8 @@ def run(args):
 
         if len(bodies) == 0:
             print("No full body poses in ", fname)
+
+        body_count = 0
         for image in bodies:
             ## create segmentation
             # mybg = cv2.imread('mybg.png')
@@ -212,10 +212,9 @@ def run(args):
             comb = crop_img_with_padding(comb, keypoints, rect)
 
             if comb is not None:
-                # TODO: fix formatting for image name, could be more than 1000 images
-                cv2.imwrite(f'{args.output_folder}/{total_segmentations:03d}.png', comb)
+                cv2.imwrite(f'{args.output_folder}/{fname}_{body_count}.png', comb)
                 print(f' -- Finished processing \'{fname}\'. --')
-                total_segmentations += 1
+                body_count += 1
                 # except:
                 #     print(f'Processing \'{fname}\'. Not satisfied the alignment strategy.')
         
