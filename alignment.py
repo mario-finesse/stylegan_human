@@ -106,7 +106,7 @@ def run(args):
     dataset = ImagesDataset(args.image_folder, transforms.Compose([transforms.ToTensor()]))
     dataloader = DataLoader(dataset, batch_size=1, shuffle=False)
 
-    body_estimation = Body('openpose/model/body_pose_model.pth')
+    body_estimation = Body(args.openpose_weights_path)
 
     total = len(dataloader)
     print('Num of dataloader : ', total)
@@ -114,16 +114,16 @@ def run(args):
     # os.makedirs(f'{args.output_folder}/middle_result', exist_ok=True)
     
     ## initialzide HumenSeg
-    human_seg_args = {}
-    human_seg_args['cfg'] = 'PP_HumanSeg/export_model/deeplabv3p_resnet50_os8_humanseg_512x512_100k_with_softmax/deploy.yaml'
-    human_seg_args['input_shape'] = [1024,512]
-    human_seg_args['save_dir'] = args.output_folder
-    human_seg_args['soft_predict'] = False
-    human_seg_args['use_gpu'] = True
-    human_seg_args['test_speed'] = False
-    human_seg_args['use_optic_flow'] = False
-    human_seg_args['add_argmax'] = True
-    human_seg_args= argparse.Namespace(**human_seg_args)
+    # human_seg_args = {}
+    # human_seg_args['cfg'] = 'PP_HumanSeg/export_model/deeplabv3p_resnet50_os8_humanseg_512x512_100k_with_softmax/deploy.yaml'
+    # human_seg_args['input_shape'] = [1024,512]
+    # human_seg_args['save_dir'] = args.output_folder
+    # human_seg_args['soft_predict'] = False
+    # human_seg_args['use_gpu'] = True
+    # human_seg_args['test_speed'] = False
+    # human_seg_args['use_optic_flow'] = False
+    # human_seg_args['add_argmax'] = True
+    human_seg_args = argparse.Namespace(**args.human_seg_args)
     human_seg = PP_HumenSeg_Predictor(human_seg_args)
 
     total_segmentations = 0
@@ -143,7 +143,8 @@ def run(args):
             full_image = cv2.resize(full_image, dim, interpolation = cv2.INTER_AREA)
         full_image = cv2.cvtColor(full_image, cv2.COLOR_RGB2BGR)
 
-        bodies = get_bodies(full_image, body_estimation, num_required_points=args.num_required_points,
+        full_image_seg, _, _, _ = human_seg.run(full_image, None)  #mybg)
+        bodies = get_bodies(full_image_seg, body_estimation, num_required_points=args.num_required_keypoints,
                             include_buffer=args.include_buffer)
 
         for image in bodies:
@@ -170,7 +171,7 @@ def run(args):
                 comb= cv2.copyMakeBorder(comb,pad_range+5,pad_range+5,0,0,cv2.BORDER_CONSTANT,value=[255,255,255])
             elif int(extTop[1])<=0 or int(extBot[1])>=comb.shape[0]:
                 print('PAD: body out of boundary', fname) #should not happened
-                return {}
+                continue
             else:
                 comb = cv2.copyMakeBorder(comb, pad_range+5, pad_range+5, 0, 0, cv2.BORDER_REPLICATE) #105 instead of 100: give some extra space
             extBot[1] = extBot[1] + pad_range+5
@@ -205,6 +206,7 @@ def run(args):
             comb = crop_img_with_padding(comb, keypoints, rect)
 
             # TODO: fix formatting for image name, could be more than 1000 images
+            print('CWD: ', os.getcwd())
             cv2.imwrite(f'{args.output_folder}/{total_segmentations:03d}.png', comb)
             print(f' -- Finished processing \'{fname}\'. --')
             total_segmentations += 1

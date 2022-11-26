@@ -20,7 +20,6 @@ def crop_from_keypoints(image: np.ndarray, keypoints: np.ndarray, include_buffer
 
 
 def get_bodies(image: np.ndarray, body_model: Body, num_required_points: int, include_buffer: int) -> List[np.ndarray]:
-    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
     keypoints, subset = body_model(image)
     valid_bodies = []
     for body in subset:
