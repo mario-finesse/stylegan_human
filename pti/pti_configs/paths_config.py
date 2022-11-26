@@ -6,9 +6,9 @@ stylegan2_ada_shhq = './data/models/stylegan_human_v2_1024.pkl'
 ir_se50 =  '' #'./model_ir_se50.pth'
 
 ## Dirs for output files
-checkpoints_dir = '/content/drive/MyDrive/ebg_r/pti/checkpoints/'
-embedding_base_dir = '/content/drive/MyDrive/ebg_r/pti/embeddings'
-experiments_output_dir = '/content/drive/MyDrive/ebg_r/pti'
+checkpoints_dir = 'data/pti/checkpoints/'
+embedding_base_dir = 'data/pti/embeddings'
+experiments_output_dir = '/content/drive/MyDrive/ebg/pti'
 
 ## Input info
 ### Input dir, where the images reside
