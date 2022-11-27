@@ -1,6 +1,6 @@
 ## Architechture
 lpips_type = 'alex'
-first_inv_type = 'w'#'w+'
+first_inv_type = 'w+'#'w+'
 optim_type = 'adam'
 
 ## Locality regularization

@@ -8,7 +8,7 @@ ir_se50 =  '' #'./model_ir_se50.pth'
 ## Dirs for output files
 checkpoints_dir = 'data/pti/checkpoints/'
 embedding_base_dir = 'data/pti/embeddings'
-experiments_output_dir = '/content/drive/MyDrive/ebg/pti'
+experiments_output_dir = 'data/pti'
 
 ## Input info
 ### Input dir, where the images reside
