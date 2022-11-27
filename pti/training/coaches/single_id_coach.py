@@ -15,11 +15,8 @@ class SingleIDCoach(BaseCoach):
 
     def train(self):
 
-        w_path_dir = f'{paths_config.embedding_base_dir}/{paths_config.input_data_id}'
-        os.makedirs(w_path_dir, exist_ok=True)
-        os.makedirs(f'{w_path_dir}/{paths_config.pti_results_keyword}', exist_ok=True)
-
         use_ball_holder = True
+
 
         for fname, image in tqdm(self.data_loader):
             image_name = fname[0]
@@ -29,13 +26,14 @@ class SingleIDCoach(BaseCoach):
             if self.image_counter >= hyperparameters.max_images_to_invert:
                 break
 
-            embedding_dir = f'{w_path_dir}/{paths_config.pti_results_keyword}/{image_name}'
-            os.makedirs(embedding_dir, exist_ok=True)
+            output_dir = f'{self.output_dir}/{image_name}'
+            os.makedirs(output_dir, exist_ok=True)
+            self.results[image_name] = {}
 
             w_pivot = None
 
             if hyperparameters.use_last_w_pivots:
-                w_pivot = self.load_inversions(w_path_dir, image_name)
+                w_pivot = self.load_inversions(output_dir, image_name)
 
             elif not hyperparameters.use_last_w_pivots or w_pivot is None:
                 w_pivot = self.calc_inversions(image, image_name)
@@ -43,9 +41,13 @@ class SingleIDCoach(BaseCoach):
             # w_pivot = w_pivot.detach().clone().to(global_config.device)
             w_pivot = w_pivot.to(global_config.device)
 
-            torch.save(w_pivot, f'{embedding_dir}/0.pt')
+            torch.save(w_pivot, f'{output_dir}/embedding.pt')
             log_images_counter = 0
             real_images_batch = image.to(global_config.device)
+
+            # Dont run pti
+            if hyperparameters.first_inv_only:
+                continue
 
             for i in range(hyperparameters.max_pti_steps):
 
@@ -72,10 +74,14 @@ class SingleIDCoach(BaseCoach):
                 global_config.training_step += 1
                 log_images_counter += 1
 
+            # save loss
+            self.results[image_name]['lpips_loss'] = str(loss_lpips.data)
+            self.results[image_name]['total_loss'] = str(loss.data)
+            self.write_results()
+
             # save output image
             tmp = torch.cat([real_images_batch, tmp1, generated_images], axis= 3)
-            save_image(tmp, f"{paths_config.experiments_output_dir}/{image_name}.png", normalize=True)
-
+            save_image(tmp, f"{output_dir}/result.png", normalize=True)
 
             self.image_counter += 1
 
@@ -84,5 +90,5 @@ class SingleIDCoach(BaseCoach):
             snapshot_data = dict()
             snapshot_data['G_ema'] = self.G
             import pickle
-            with open(f'{paths_config.checkpoints_dir}/model_{image_name}.pkl', 'wb') as f:
-                    pickle.dump(snapshot_data, f)
+            with open(f'{output_dir}/model.pkl', 'wb') as f:
+                pickle.dump(snapshot_data, f)

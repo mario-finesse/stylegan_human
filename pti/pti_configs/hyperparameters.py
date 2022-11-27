@@ -20,6 +20,7 @@ LPIPS_value_threshold = 0.04
 max_pti_steps = 350
 first_inv_steps = 450
 max_images_to_invert = 200
+first_inv_only = False
 
 ## Optimization
 pti_learning_rate = 5e-4

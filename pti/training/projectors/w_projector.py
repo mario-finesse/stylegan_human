@@ -141,4 +141,4 @@ def project(
                 buf *= buf.square().mean().rsqrt()
 
     del G
-    return w_opt.repeat([1, 18, 1])
+    return w_opt.repeat([1, 18, 1]), loss.data if loss is not None else None

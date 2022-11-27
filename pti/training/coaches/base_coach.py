@@ -1,4 +1,5 @@
 import abc
+import json
 import os
 import pickle
 from argparse import Namespace
@@ -38,8 +39,20 @@ class BaseCoach:
         self.restart_training()
 
         # Initialize checkpoint dir
-        self.checkpoint_dir = paths_config.checkpoints_dir
-        os.makedirs(self.checkpoint_dir, exist_ok=True)
+        self.output_dir = f'{paths_config.output_path}'
+        os.makedirs(self.output_dir, exist_ok=True)
+
+        # Init results
+        self.results_path = os.path.join(self.output_dir, 'results.json')
+        if os.path.exists(self.results_path):
+            with open(self.results_path, 'r') as f:
+                self.results = json.load(f)
+        else:
+            self.results = {}
+
+    def write_results(self):
+        with open(self.results_path, 'w') as f:
+            json.dump(self.results, f, indent=4)
 
     def restart_training(self):
 
@@ -53,8 +66,6 @@ class BaseCoach:
         self.optimizer = self.configure_optimizers()
 
     def get_inversion(self, w_path_dir, image_name, image):
-        embedding_dir = f'{w_path_dir}/{paths_config.pti_results_keyword}/{image_name}'
-        os.makedirs(embedding_dir, exist_ok=True)
 
         w_pivot = None
 
@@ -63,7 +74,6 @@ class BaseCoach:
 
         if not hyperparameters.use_last_w_pivots or w_pivot is None:
             w_pivot = self.calc_inversions(image, image_name)
-            torch.save(w_pivot, f'{embedding_dir}/0.pt')
 
         w_pivot = w_pivot.to(global_config.device)
         return w_pivot
@@ -88,9 +98,12 @@ class BaseCoach:
 
         else:
             id_image = torch.squeeze((image.to(global_config.device) + 1) / 2) * 255
-            w = w_projector.project(self.G, id_image, device=torch.device(global_config.device), w_avg_samples=600,
-                                    num_steps=hyperparameters.first_inv_steps, w_name=image_name,
-                                    use_wandb=self.use_wandb)
+            w, inv_loss = w_projector.project(self.G, id_image, device=torch.device(global_config.device), w_avg_samples=600,
+                                              num_steps=hyperparameters.first_inv_steps, w_name=image_name,
+                                              use_wandb=self.use_wandb)
+
+            self.results[image_name]['projection_loss'] = str(inv_loss)
+            self.write_results()
 
         return w
 
