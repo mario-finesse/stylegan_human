@@ -8,6 +8,7 @@ from pti.training.coaches.base_coach import BaseCoach
 from utils.log_utils import log_images_from_w
 from torchvision.utils import save_image
 
+
 class SingleIDCoach(BaseCoach):
 
     def __init__(self, data_loader, use_wandb):
