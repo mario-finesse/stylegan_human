@@ -82,10 +82,11 @@ class BaseCoach:
         if image_name in self.w_pivots:
             return self.w_pivots[image_name]
 
-        if hyperparameters.first_inv_type == 'w+':
-            w_potential_path = f'{w_path_dir}/{paths_config.e4e_results_keyword}/{image_name}/0.pt'
-        else:
-            w_potential_path = f'{w_path_dir}/{paths_config.pti_results_keyword}/{image_name}/0.pt'
+        # if hyperparameters.first_inv_type == 'w+':
+        #     w_potential_path = f'{w_path_dir}/{paths_config.e4e_results_keyword}/{image_name}/0.pt'
+        # else:
+        #     w_potential_path = f'{w_path_dir}/{paths_config.pti_results_keyword}/{image_name}/0.pt'
+        w_potential_path = f'{paths_config.last_w_pivots_path}/{image_name}/embedding.pt'
         if not os.path.isfile(w_potential_path):
             return None
         w = torch.load(w_potential_path).to(global_config.device)

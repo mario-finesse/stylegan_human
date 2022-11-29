@@ -13,6 +13,7 @@ output_path = 'data/pti/checkpoints/'
 input_data_path = './stylegan_human/aligned_image'
 ### Inversion identifier, used to keeping track of the inversion results. Both the latent code and the generator
 input_data_id = 'test'
+last_w_pivots_path = ''
 
 ## Keywords
 pti_results_keyword = 'PTI'
