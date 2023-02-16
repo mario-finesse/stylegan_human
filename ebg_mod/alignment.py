@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 import torch
 
-from openpose.src.body import Body
+from stylegan_human.openpose.src.body import Body
 
 
 def crop_from_keypoints(image: np.ndarray, keypoints: np.ndarray, include_buffer: int) -> np.ndarray:

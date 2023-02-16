@@ -5,7 +5,7 @@ import os
 from torch.utils.data import Dataset
 from PIL import Image
 
-from utils.data_utils import make_dataset
+from stylegan_human.utils.data_utils import make_dataset
 
 
 class ImagesDataset(Dataset):

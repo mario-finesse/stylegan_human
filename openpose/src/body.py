@@ -8,8 +8,8 @@ import matplotlib
 import torch
 from torchvision import transforms
 
-from openpose.src import util
-from openpose.src.model import bodypose_model
+from stylegan_human.openpose.src import util
+from stylegan_human.openpose.src.model import bodypose_model
 
 class Body(object):
     def __init__(self, model_path):

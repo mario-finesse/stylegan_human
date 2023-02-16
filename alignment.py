@@ -8,18 +8,18 @@ import torch
 from torch.utils.data import DataLoader
 from torchvision.transforms import transforms
 
-from ebg_mod.alignment import get_bodies
-from utils.ImagesDataset import ImagesDataset
+from stylegan_human.ebg_mod.alignment import get_bodies
+from stylegan_human.utils.ImagesDataset import ImagesDataset
 
 import cv2
 import time
 import imutils
 
 # for openpose body keypoint detector : # (src:https://github.com/Hzzone/pytorch-openpose)
-from openpose.src.body import Body
+from stylegan_human.openpose.src.body import Body
 
 # for paddlepaddle human segmentation : #(src: https://github.com/PaddlePaddle/PaddleSeg/blob/release/2.5/contrib/PP-HumanSeg/)
-from PP_HumanSeg.deploy.infer import Predictor as PP_HumenSeg_Predictor
+from stylegan_human.PP_HumanSeg.deploy.infer import Predictor as PP_HumenSeg_Predictor
 
 import math
 def angle_between_points(p0,p1,p2):
