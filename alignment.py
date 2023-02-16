@@ -11,6 +11,9 @@ from torchvision.transforms import transforms
 from stylegan_human.ebg_mod.alignment import get_bodies
 from stylegan_human.utils.ImagesDataset import ImagesDataset
 
+# upload the images to aws
+from file_aws import *
+
 import cv2
 import time
 import imutils
@@ -212,7 +215,11 @@ def run(args):
             comb = crop_img_with_padding(comb, keypoints, rect)
 
             if comb is not None:
-                cv2.imwrite(f'{args.output_folder}/{fname}_{body_count}.png', comb)
+                filename = f'{fname}_{body_count}.png' # f'{args.output_folder}/{fname}_{body_count}.png'
+                if args.aws:
+                    s3_Helper_functions(website=args.website).save_image(filename, comb)
+                else:
+                    cv2.imwrite(filename, comb)
                 print(f' -- Finished processing \'{fname}\'. --')
                 body_count += 1
                 # except:
