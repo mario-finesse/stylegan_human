@@ -25,7 +25,7 @@ def get_bodies(image: np.ndarray, body_model: Body, num_required_points: int, in
     for body in subset:
 
         # The last dimension of each subset contains the number of POCO body keypoints found. See openpose for more info
-        if body[-1] == num_required_points:
+        if body[-1] >= num_required_points:
             body_keypoint_ids = body[:18].astype(int)
             body_keypoints = keypoints[body_keypoint_ids]
             valid_bodies.append(crop_from_keypoints(image, body_keypoints, include_buffer))
