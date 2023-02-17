@@ -1,6 +1,4 @@
 # Copyright (c) SenseTime Research. All rights reserved.
-
-
 import os
 import argparse 
 import numpy as np
@@ -34,7 +32,6 @@ def angle_between_points(p0,p1,p2):
     if a * b == 0:
         return -1
     return math.acos((a+b-c) / math.sqrt(4*a*b)) * 180 / math.pi
-
 
 def crop_img_with_padding(img, keypoints, rect):
     person_xmin,person_xmax, ymin, ymax= rect
