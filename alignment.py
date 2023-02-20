@@ -210,7 +210,7 @@ def run(args):
             comb = crop_img_with_padding(comb, keypoints, rect)
 
             if comb is not None:
-                filename = f'{fname}_{body_count}.png' # f'{args.output_folder}/{fname}_{body_count}.png'
+                filename = f'{fname}_{len(keypoints)}.png'
                 if args.aws:
                     print('filename', filename)
                     s3_Helper_functions(website=args.website).save_image(filename, comb)
