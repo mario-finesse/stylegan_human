@@ -102,8 +102,6 @@ def crop_img_with_padding(img, keypoints, rect):
 
 
 
-
-
 def run(args):
     os.makedirs(args.output_folder, exist_ok=True)
     dataset = ImagesDataset(args.image_folder, transforms.Compose([transforms.ToTensor()]))
@@ -214,6 +212,7 @@ def run(args):
             if comb is not None:
                 filename = f'{fname}_{body_count}.png' # f'{args.output_folder}/{fname}_{body_count}.png'
                 if args.aws:
+                    print('filename', filename)
                     s3_Helper_functions(website=args.website).save_image(filename, comb)
                 else:
                     cv2.imwrite(filename, comb)
