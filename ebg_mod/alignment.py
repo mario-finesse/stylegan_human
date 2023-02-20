@@ -6,7 +6,6 @@ import torch
 
 from stylegan_human.openpose.src.body import Body
 
-
 def crop_from_keypoints(image: np.ndarray, keypoints: np.ndarray, include_buffer: int) -> np.ndarray:
     x = keypoints[:, 0].astype(int)
     y = keypoints[:, 1].astype(int)
