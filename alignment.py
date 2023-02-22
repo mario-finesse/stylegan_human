@@ -213,7 +213,7 @@ def run(args):
                 filename = f'{fname}_{len(keypoints)}.png'
                 if args.aws:
                     print('filename', filename)
-                    s3_Helper_functions(website=args.website).save_image(filename, comb)
+                    s3_Helper_functions(website=args.website).save_image(filename, comb, args.output_folder)
                 else:
                     cv2.imwrite(filename, comb)
                 print(f' -- Finished processing \'{fname}\'. --')
