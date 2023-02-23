@@ -215,7 +215,7 @@ def run(args):
                     print('filename', filename)
                     s3_Helper_functions(website=args.website).save_image(filename, comb, args.output_folder)
                 else:
-                    cv2.imwrite(filename, comb)
+                    cv2.imwrite(f'{args.output_folder}/{filename}', comb)
                 print(f' -- Finished processing \'{fname}\'. --')
                 body_count += 1
                 # except:
