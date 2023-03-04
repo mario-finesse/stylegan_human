@@ -221,7 +221,6 @@ def run(args):
                 # except:
                 #     print(f'Processing \'{fname}\'. Not satisfied the alignment strategy.')
         
-        
 if __name__ == '__main__':
     torch.backends.cudnn.benchmark = True
     torch.backends.cudnn.deterministic = False
